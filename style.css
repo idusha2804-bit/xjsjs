@@ -1,0 +1,52 @@
+/* Красная пульсирующая виньетка */
+#rp-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+}
+#rp-overlay.rp-on { opacity: 1; }
+
+#rp-overlay .rp-pulse {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(var(--rp-rgb, 255,0,40), 0) 30%,
+        rgba(var(--rp-rgb, 255,0,40), var(--rp-alpha, 0.6)) 100%
+    );
+    animation: rp-pulse var(--rp-period, 3s) ease-in-out infinite;
+}
+@keyframes rp-pulse {
+    0%, 100% { opacity: 0.2; }
+    50%      { opacity: 1; }
+}
+
+/* Плавное "плавание" всей страницы: чат и фон */
+body.rp-sway #sheld {
+    animation: rp-sway calc(var(--rp-period, 3s) * 3) ease-in-out infinite;
+    transform-origin: 50% 50%;
+    will-change: transform;
+}
+body.rp-sway #bg1,
+body.rp-sway #bg_custom {
+    animation: rp-sway-bg calc(var(--rp-period, 3s) * 4) ease-in-out infinite;
+    will-change: transform;
+}
+
+@keyframes rp-sway {
+    0%   { transform: translate(0, 0) rotate(0deg) scale(1); }
+    20%  { transform: translate(calc(var(--rp-amp, 4) * -1.2px), calc(var(--rp-amp, 4) * 0.8px)) rotate(calc(var(--rp-amp, 4) * -0.08deg)) scale(1.002); }
+    40%  { transform: translate(calc(var(--rp-amp, 4) * 0.6px), calc(var(--rp-amp, 4) * 1.4px)) rotate(calc(var(--rp-amp, 4) * 0.05deg)) scale(1); }
+    60%  { transform: translate(calc(var(--rp-amp, 4) * 1.2px), calc(var(--rp-amp, 4) * -0.6px)) rotate(calc(var(--rp-amp, 4) * 0.08deg)) scale(1.002); }
+    80%  { transform: translate(calc(var(--rp-amp, 4) * -0.5px), calc(var(--rp-amp, 4) * -1.1px)) rotate(calc(var(--rp-amp, 4) * -0.04deg)) scale(1); }
+    100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+}
+@keyframes rp-sway-bg {
+    0%, 100% { transform: scale(1.06) translate(0, 0); }
+    25%      { transform: scale(1.06) translate(calc(var(--rp-amp, 4) * 1.8px), calc(var(--rp-amp, 4) * -1px)); }
+    50%      { transform: scale(1.06) translate(calc(var(--rp-amp, 4) * -1px), calc(var(--rp-amp, 4) * 1.6px)); }
+    75%      { transform: scale(1.06) translate(calc(var(--rp-amp, 4) * -1.8px), calc(var(--rp-amp, 4) * -0.8px)); }
+}
